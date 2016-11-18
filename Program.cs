@@ -13,7 +13,13 @@ namespace WebApplication
         public static void Main(string[] args)
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(
+                    Directory.GetParent(
+                        Directory.GetParent(
+                            Directory.GetCurrentDirectory()
+                        ).FullName
+                    ).FullName
+                )
                 .AddJsonFile("config/config.json", optional: true)
                 .Build();
 
