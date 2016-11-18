@@ -15,9 +15,7 @@ namespace WebApplication
             var config = new ConfigurationBuilder()
                 .SetBasePath(
                     Directory.GetParent(
-                        Directory.GetParent(
-                            Directory.GetCurrentDirectory()
-                        ).FullName
+                        Directory.GetCurrentDirectory()
                     ).FullName
                 )
                 .AddJsonFile("config/config.json", optional: true)
