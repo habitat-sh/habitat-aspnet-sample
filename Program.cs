@@ -13,8 +13,8 @@ namespace WebApplication
         public static void Main(string[] args)
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("config/config.json", optional: true)
+                .SetBasePath(Environment.GetEnvironmentVariable("HAB_CONFIG_PATH") ?? Directory.GetCurrentDirectory())
+                .AddJsonFile("config.json", optional: true)
                 .Build();
 
             var host = new WebHostBuilder()
