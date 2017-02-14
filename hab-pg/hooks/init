@@ -1,0 +1,12 @@
+mkdir {{pkg.svc_config_path}}/conf.d -ErrorAction SilentlyContinue
+mkdir {{pkg.svc_var_path}}/pg_stat_tmp -ErrorAction SilentlyContinue
+
+if (!(Test-Path "{{pkg.svc_data_path}}/PG_VERSION")) {
+  Write-Host " Database does not exist, creating with 'initdb'"
+  initdb -U {{cfg.initdb_superuser_name}} `
+         -E {{cfg.initdb_encoding}} `
+         -D {{pkg.svc_data_path}} `
+         --pwfile {{cfg.initdb_pwfile}} `
+         --no-locale
+  rm {{pkg.svc_config_path}}/pwfile
+}

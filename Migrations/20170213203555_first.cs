@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace habitataspnetsample.Migrations
 {
@@ -14,7 +13,7 @@ namespace habitataspnetsample.Migrations
                 columns: table => new
                 {
                     MessageId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
                     MessageText = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

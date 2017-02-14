@@ -29,7 +29,7 @@ namespace habitat_aspnet_sample
             // Add framework services.
             services.AddMvc();
 
-            services.AddDbContext<MessageContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<MessageContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
