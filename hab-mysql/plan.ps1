@@ -12,7 +12,6 @@ $pkg_lib_dirs=@("lib")
 $pkg_include_dirs=@("include")
 $pkg_exports=@{
     "port"="port"
-    "bind"="bind"
     "root_password"="root_password"
 }
 
