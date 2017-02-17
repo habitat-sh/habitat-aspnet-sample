@@ -1,3 +1,0 @@
-$env:PGDATA="{{pkg.svc_data_path}}"
-
-{{pkg.path}}/bin/postgres -c config_file={{pkg.svc_path}}/config/postgresql.conf 2>&1
