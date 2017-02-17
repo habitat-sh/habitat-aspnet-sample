@@ -14,7 +14,7 @@ namespace habitat_aspnet_sample
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Environment.GetEnvironmentVariable("HAB_CONFIG_PATH") ?? Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .Build();
 
             var host = new WebHostBuilder()

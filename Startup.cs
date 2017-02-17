@@ -15,7 +15,7 @@ namespace habitat_aspnet_sample
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Environment.GetEnvironmentVariable("HAB_CONFIG_PATH") ?? env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
