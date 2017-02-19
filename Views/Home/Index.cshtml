@@ -1,9 +1,14 @@
+@using Microsoft.Extensions.Options;
+@using habitat_aspnet_sample.Configuration;
+ 
+@inject IOptions<ApplicationConfigurations> OptionsApplicationConfiguration
+
 @model IEnumerable<habitat_aspnet_sample.Models.Message>
 
 @{
     ViewData["Title"] = "Index";
 }
-
+<h1>@OptionsApplicationConfiguration.Value.ImportantMessage</h1>
 <h2>Index</h2>
 
 <p>

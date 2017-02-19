@@ -1,5 +1,5 @@
 $pkg_name="habitat-aspnet-sample"
-$pkg_origin="mwrock"
+$pkg_origin="core"
 $pkg_version="0.2.0"
 $pkg_source="nosuchfile.tar.gz"
 $pkg_upstream_url="https://github.com/mwrock/habitat-aspnet-sample"
@@ -15,7 +15,7 @@ function invoke-unpack { }
 
 
 function Invoke-Build {
-  cp $PLAN_CONTEXT/../* $HAB_CACHE_SRC_PATH/$pkg_dirname -recurse -force
+  cp $PLAN_CONTEXT/../* $HAB_CACHE_SRC_PATH/$pkg_dirname -recurse -force -Exclude ".vagrant"
   dotnet restore
   dotnet build
   if($LASTEXITCODE -ne 0) {
