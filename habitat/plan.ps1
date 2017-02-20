@@ -9,6 +9,10 @@ $pkg_description="A sample ASP.NET Core app"
 
 $pkg_deps=@("core/dotnet-core")
 
+$pkg_exports=@{
+    "port"="port"
+}
+
 function invoke-download { }
 function invoke-verify { }
 function invoke-unpack { }

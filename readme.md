@@ -76,6 +76,16 @@ hab start core/habitat-aspnet-sample --bind database:mysql.default --peer 127.0.
 
 Note that because we are running two supervisors on one host, we need to specify different `--listen-gossip` and `--listen-http` endpoints for the second supervisor. We use `--bind` to bind the connection string in the ASP.NET app to the MySql service's configuration. We also turn on the `--strategy at-once` so we can watch the application update itself when we upload new `hart`s to our depot.
 
+## Using the `Vagrantfile` in this repo
+
+The `Vagrantfile` included will start 4 VMs:
+
+* `hab1` - `hab3`: Windows Server 2016 machines. Their firewalls will be configured, and environment variables permanently set. The `Vagrantfile` assumes that you keep `hab.exe` and its dependencies in `c:/ProgramData/Chocolatey/lib/hab/tools` and will sync that to the vm and put it on the path. If you keep this file in a different location, adjust the `Vagrantfile` or copy the files to the above location.
+
+* `haproxy`: An Ubuntu 14.04 vm that installs the current linux version of habitat.
+
+These machines are confiured to work with the [demo_script](demo_script.md) in the root of this repo.
+
 ## Performing a rolling update accross three or more VMs
 
 You need at least three services running the ASP.NET sample in order to perform a rolling update. You could do this all on one machine as long as each service uses a different gossip, http and kestral port. If you would like to have each service run on its own VM (containers are coming), there is just one bit of server prep you should perform:
@@ -86,6 +96,8 @@ You need at least three services running the ASP.NET sample in order to perform 
 New-NetFirewallRule -DisplayName "Habitat TCP" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 9631,9638
 New-NetFirewallRule -DisplayName "Habitat UDP" -Direction Inbound -Action Allow -Protocol UDP -LocalPort 9638
 ```
+
+Alternatively you can use the [Vagrantfile](Vagrantfile) in this repo to provision these machines with vagrant.
 
 ### Starting the services
 

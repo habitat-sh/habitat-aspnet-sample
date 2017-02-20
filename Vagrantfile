@@ -3,7 +3,7 @@
 
 # This should be put into the root of the chef repo
 
-$script = <<SCRIPT
+$win_script = <<SCRIPT
 function Add-Path($path) {
   if(!$env:path.Contains($path)) {
     $new_path = "$env:PATH;$path"
@@ -28,11 +28,19 @@ Copy-Item "/vagrant-hab/pkgs/core/mysql" "/hab/pkgs/core" -Recurse -Force
 
 SCRIPT
 
+$haproxy_script = <<SCRIPT
+  sudo wget "https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh"
+  sudo chmod u+x install.sh
+  sudo ./install.sh
+  sudo adduser --system hab || true
+  sudo addgroup --system hab || true
+SCRIPT
+
 Vagrant.configure(2) do |config|
   (1..3).each do |i|
     config.vm.define "hab#{i}" do |hab|
       hab.vm.box = "mwrock/Windows2016"
-      hab.vm.provision "shell", inline: $script
+      hab.vm.provision "shell", inline: $win_script
       hab.vm.guest = :windows
 
       hab.vm.synced_folder "/ProgramData/Chocolatey/lib/hab/tools", "/habitat"
@@ -50,6 +58,15 @@ Vagrant.configure(2) do |config|
         vb.memory = 1024
         vb.network "forwarded_port", guest: 5985, host: 55985
       end
+    end
+  end
+
+  config.vm.define "haproxy" do |haproxy|
+    haproxy.vm.box = "ericmann/trusty64"
+    haproxy.vm.provision "shell", inline: $haproxy_script
+    haproxy.vm.provider "hyperv" do |hv|
+      hv.memory = "512"
+      hv.vmname = "haproxy"
     end
   end
 end

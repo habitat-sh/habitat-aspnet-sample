@@ -54,9 +54,57 @@ Enter-PSSession -VMName hab3 -Credential $c
 hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
 ```
 
+### start haproxy
+
+```
+vagrant ssh haproxy
+sudo HAB_HAPROXY="$(cat /vagrant/habitat/ha.toml)" hab start core/haproxy  --group dev --bind backend:habitat-aspnet-sample.dev --peer 192.168.137.6:9638
+```
+
 ### Shutdown all supervisors
 
 ```
 $c = Get-Credential vagrant # vagrant is the password when prompted
-Invoke-Command -VMName @('hab1','hab2','hab3') -Credential $c -Command { Taskkill /IM hab-sup.exe /T /F }
+Invoke-Command -VMName @('hab1','hab2','hab3','haproxy') -Credential $c -Command { Taskkill /IM hab-sup.exe /T /F }
+```
+
+Finally run `cls` in all windows to clear the display.
+
+## Demo
+
+### Start mysql
+
+```
+hab start core/mysql --group dev
+```
+
+### Start `hab1`'s aspnet service
+
+```
+hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer $(Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias Ethernet).IPAddress:9638 --listen-gossip 0.0.0.0:9639 --listen-http 0.0.0.0:9632 --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
+```
+
+### Start the other aspnet services
+
+```
+hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
+```
+
+### Start haproxy
+
+```
+sudo HAB_HAPROXY="$(cat /vagrant/habitat/ha.toml)" hab start core/haproxy  --group dev --bind backend:habitat-aspnet-sample.dev --peer 192.168.137.6:9638
+```
+
+### Update important message config
+
+```
+"important_message = 'all is fine'" | hab config apply --peer 192.168.137.6 habitat-aspnet-sample.dev 1
+```
+
+### Update sample app
+
+```
+build .
+hab pkg upload -z <key> -u https://depot.stevenmurawski.com/v1/depot C:\dev\habitat-aspnet-sample\habitat\results\core-habitat-aspnet-sample-0.2.0-20170219124600-x86_64-windows.hart
 ```
