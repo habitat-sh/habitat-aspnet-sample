@@ -45,7 +45,6 @@ namespace habitat_aspnet_sample.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MessageId,MessageText")] Message message)
         {
             if (ModelState.IsValid)
@@ -73,7 +72,6 @@ namespace habitat_aspnet_sample.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MessageId,MessageText")] Message message)
         {
             if (id != message.MessageId)
@@ -122,7 +120,6 @@ namespace habitat_aspnet_sample.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var message = await _context.Messages.SingleOrDefaultAsync(m => m.MessageId == id);
