@@ -43,7 +43,7 @@ Vagrant.configure(2) do |config|
       hab.vm.provision "shell", inline: $win_script
       hab.vm.guest = :windows
 
-      hab.vm.synced_folder "/ProgramData/Chocolatey/lib/hab/tools", "/habitat"
+      hab.vm.synced_folder "/habitat", "/habitat"
       hab.vm.synced_folder ".", "/habitat-aspnet-sample"
       hab.vm.synced_folder "/hab", "/vagrant-hab"
 

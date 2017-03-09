@@ -22,11 +22,9 @@ The `hab-mysql` folder includes a habitat plan for building MySql for Windows.
 
 In order to succesfully build and run this application inside habitat today, the following prerequisites exist:
 
-1. You are using a `hab.exe` binary compiled from the `win_hack_core` [habitat branch](https://github.com/habitat-sh/habitat/tree/win_hack_core).
+1. You are using `hab.exe` version 0.18.0 or later.
 2. `$env:HAB_WINDOWS_STUDIO` is set to any value. I like `1` but your preferences may vary.
 3. Set `$env:HAB_DEPOT_URL` to `https://depot.stevenmurawski.com/v1/depot`
-
-I try to keep `win_hack_core` rebased against current master and it includes 2 small hacks (view the diff in github if you are curious) that makes accessing packages from a depot possible on Windows.
 
 The depot.stevenmurawski.com depot contains all necessary windows habitat packages (supervisor, studio, dotnet-core, etc) and only windows packages.
 
@@ -80,7 +78,7 @@ Note that because we are running two supervisors on one host, we need to specify
 
 The `Vagrantfile` included will start 4 VMs:
 
-* `hab1` - `hab3`: Windows Server 2016 machines. Their firewalls will be configured, and environment variables permanently set. The `Vagrantfile` assumes that you keep `hab.exe` and its dependencies in `c:/ProgramData/Chocolatey/lib/hab/tools` and will sync that to the vm and put it on the path. If you keep this file in a different location, adjust the `Vagrantfile` or copy the files to the above location.
+* `hab1` - `hab3`: Windows Server 2016 machines. Their firewalls will be configured, and environment variables permanently set. The `Vagrantfile` assumes that you keep `hab.exe` and its dependencies in `c:/habitat` and will sync that to the vm and put it on the path. If you keep this file in a different location, adjust the `Vagrantfile` or copy the files to the above location.
 
 * `haproxy`: An Ubuntu 14.04 vm that installs the current linux version of habitat.
 
