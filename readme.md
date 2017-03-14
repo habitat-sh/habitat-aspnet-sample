@@ -18,6 +18,14 @@ The `habitat` folder includes the habitat plan, hooks, and necessary configurati
 
 The `hab-mysql` folder includes a habitat plan for building MySql for Windows.
 
+### Habitat for Linux plan
+
+The `hab-linux` folder contains a bash based plan for deploying a linux package on docker.
+
+### Database Migrations plan
+
+The `hab-migrations` folder contains a plan for a linux based package used to simply run database updates and create the initial database. When MySql runs in docker, this is helpful because it is diffucult to run the migration from the host. However, it would be beneficial to build one for windows as well.
+
 ## Using this sample with current Habitat binaries
 
 In order to succesfully build and run this application inside habitat today, the following prerequisites exist:
@@ -32,6 +40,8 @@ Eventually these prerequisites will no longer be necessary.
 
 ## Building the MySql and ASP.NET Core sample
 
+### On Windows
+
 ```
 git clone https://github.com/habitat-sh/habitat-aspnet-sample
 cd habitat-aspnet-sample
@@ -40,7 +50,11 @@ build hab-mysql
 build .
 ```
 
-This will pull down this repository, enter a Windows habitat studio and build the MySql and ASP.NET Core sample plans.
+This will pull down this repository, enter a Windows habitat studio and build the MySql and ASP.NET Core sample plans. Note that both of these packages are also available from the windows based depot if you do not want to build them locally.
+
+### On Linux
+
+On linux we can use the mysql plan in core-plans. However, Some things like configuration exports have not been added to that plan. I used [this PR](https://github.com/habitat-sh/core-plans/pull/449) to build a mysql package and exported that to docker.
 
 ## Running the application on one machine
 
@@ -48,31 +62,55 @@ While still in the studio:
 
 ### Start MySql
 
+**VM:**
 ```
 hab start core/mysql
 ```
 
 A new window will open and start a habitat supervisor running mysql on port 3306 in the `default` service group.
 
+
+**Docker:**
+```
+docker run -e HAB_MYSQL="$(cat hab-mysql/default.toml | Out-String)" -it -p 3306:3306 core/mysql --group dev
+```
+
 ### Create the Database
 
 You will need to be in the root of the sample application on the same machine running the database:
 
+**VM:**
 ```
-hab pkg install core/dotnet-core
-hab pkg exec core/dotnet-core dotnet refresh
-hab pkg exec core/dotnet-core dotnet ef database update
+hab pkg install core/dotnet-core-sdk
+hab pkg exec core/dotnet-core-sdk dotnet refresh
+hab pkg exec core/dotnet-core-sdk dotnet ef database update
 ```
 
-This only needs to be done once for the lifrtime of the VM or after changing schema.
+**Docker:**
+```
+hab studio enter # Enter docker container studio
+build hab-migrator
+hab pkg export docker core/sample-migrator
+exit
+
+docker run -it core/sample-migrator --group dev --peer 172.17.0.2 --bind database:mysql.dev
+```
+
+This only needs to be done once for the lifrtime of the VM or container or after changing schema.
 
 ### Start the sample app:
 
+**VM:**
 ```
 hab start core/habitat-aspnet-sample --bind database:mysql.default --peer 127.0.0.1:9638 --listen-gossip 0.0.0.0:9639 --listen-http 0.0.0.0:9632 --strategy at-once --url https://depot.stevenmurawski.com/v1/depot
 ```
 
 Note that because we are running two supervisors on one host, we need to specify different `--listen-gossip` and `--listen-http` endpoints for the second supervisor. We use `--bind` to bind the connection string in the ASP.NET app to the MySql service's configuration. We also turn on the `--strategy at-once` so we can watch the application update itself when we upload new `hart`s to our depot.
+
+**Docker:**
+```
+docker run -it -p 8090:8090 core/habitat-aspnet-sample --group dev --peer 172.17.0.2 --bind database:mysql.dev
+```
 
 ## Using the `Vagrantfile` in this repo
 

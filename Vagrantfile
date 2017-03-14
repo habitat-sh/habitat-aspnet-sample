@@ -24,7 +24,6 @@ mkdir "/hab/cache" -ErrorAction SilentlyContinue
 mkdir "/hab/pkgs/core" -ErrorAction SilentlyContinue
 
 Copy-Item "/vagrant-hab/cache/keys" "/hab/cache" -Recurse -Force
-Copy-Item "/vagrant-hab/pkgs/core/mysql" "/hab/pkgs/core" -Recurse -Force
 
 SCRIPT
 

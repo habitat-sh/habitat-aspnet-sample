@@ -27,15 +27,15 @@ hab start core/mysql --group dev
 $c = Get-Credential vagrant # vagrant is the password when prompted
 Enter-PSSession -VMName hab1 -Credential $c
 cd c:\habitat-aspnet-sample
-hab pkg install core/dotnet-core
-hab pkg exec core/dotnet-core dotnet restore
-hab pkg exec core/dotnet-core dotnet ef database update
+hab pkg install core/dotnet-core-sdk
+hab pkg exec core/dotnet-core-sdk dotnet restore
+hab pkg exec core/dotnet-core-sdk dotnet ef database update
 ```
 
 ### Start first aspnet service
 
 ```
-hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer $(Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias Ethernet).IPAddress:9638 --listen-gossip 0.0.0.0:9639 --listen-http 0.0.0.0:9632 --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
+hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --listen-gossip 0.0.0.0:9639 --listen-http 0.0.0.0:9632 --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
 ```
 
 ### Start other aspnet services

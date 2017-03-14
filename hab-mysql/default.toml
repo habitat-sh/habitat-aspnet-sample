@@ -1,5 +1,6 @@
-port = 3306	
-root_password = ""
-app_username = "hab"
-app_password = "hab"
-password_column_name = "authentication_string"
+port = 3306
+bind = false
+root_password = ''
+app_username = 'hab'
+app_password = 'hab'
+password_column_name = 'authentication_string'
