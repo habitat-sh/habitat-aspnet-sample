@@ -47,14 +47,23 @@ git clone https://github.com/habitat-sh/habitat-aspnet-sample
 cd habitat-aspnet-sample
 hab studio enter
 build hab-mysql
-build .
+build habitat
 ```
 
 This will pull down this repository, enter a Windows habitat studio and build the MySql and ASP.NET Core sample plans. Note that both of these packages are also available from the windows based depot if you do not want to build them locally.
 
 ### On Linux
 
-On linux we can use the mysql plan in core-plans. However, Some things like configuration exports have not been added to that plan. I used [this PR](https://github.com/habitat-sh/core-plans/pull/449) to build a mysql package and exported that to docker.
+On linux we can use the mysql plan in core-plans and you do not need to build it. For the ASP.NET Core application, you will want to enter into a docker/Linux based studio and build the plans both in `hab-linux` and `hab-migrator`.
+
+```
+git clone https://github.com/habitat-sh/habitat-aspnet-sample
+cd habitat-aspnet-sample
+hab studio enter
+build hab-mysql
+build hab-linux
+build hab-migrator
+```
 
 ## Running the application on one machine
 

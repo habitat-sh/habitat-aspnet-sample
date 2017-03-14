@@ -12,8 +12,8 @@ $pkg_lib_dirs=@("lib")
 $pkg_include_dirs=@("include")
 $pkg_exports=@{
     "port"="port"
-    "pwd"="app_password"
-    "uid"="app_username"
+    "password"="app_password"
+    "username"="app_username"
 }
 
 function Invoke-Unpack {
