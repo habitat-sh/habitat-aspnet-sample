@@ -30,13 +30,13 @@ The `hab-migrations` folder contains a plan for a linux based package used to si
 
 In order to succesfully build and run this application inside habitat today, the following prerequisites exist:
 
-1. You are using `hab.exe` version 0.18.0 or later.
+1. You are using `hab.exe` version 0.20.0 or later. Note that 0.18.0  and above is usable but lacks the multi service spervisor if running the mysql and ASP.NET Core services on the same instance.
 2. `$env:HAB_WINDOWS_STUDIO` is set to any value. I like `1` but your preferences may vary.
 3. Set `$env:HAB_DEPOT_URL` to `https://depot.stevenmurawski.com/v1/depot`
 
 The depot.stevenmurawski.com depot contains all necessary windows habitat packages (supervisor, studio, dotnet-core, etc) and only windows packages.
 
-Eventually these prerequisites will no longer be necessary.
+Eventually these last two prerequisites will no longer be necessary.
 
 ## Building the MySql and ASP.NET Core sample
 
@@ -91,7 +91,7 @@ You will need to be in the root of the sample application on the same machine ru
 **VM:**
 ```
 hab pkg install core/dotnet-core-sdk
-hab pkg exec core/dotnet-core-sdk dotnet refresh
+hab pkg exec core/dotnet-core-sdk dotnet restore
 hab pkg exec core/dotnet-core-sdk dotnet ef database update
 ```
 
@@ -111,10 +111,10 @@ This only needs to be done once for the lifrtime of the VM or container or after
 
 **VM:**
 ```
-hab start core/habitat-aspnet-sample --bind database:mysql.default --peer 127.0.0.1:9638 --listen-gossip 0.0.0.0:9639 --listen-http 0.0.0.0:9632 --strategy at-once --url https://depot.stevenmurawski.com/v1/depot
+hab sup load core/habitat-aspnet-sample --bind database:mysql.default --strategy at-once --url https://depot.stevenmurawski.com/v1/depot
 ```
 
-Note that because we are running two supervisors on one host, we need to specify different `--listen-gossip` and `--listen-http` endpoints for the second supervisor. We use `--bind` to bind the connection string in the ASP.NET app to the MySql service's configuration. We also turn on the `--strategy at-once` so we can watch the application update itself when we upload new `hart`s to our depot.
+Note that when adding services to a supervisor already running as we are doing here, we use `hab sup load` to load the service into the supervisor. We should see the ASP.NET Core service starting in our separate supervisor window. We use `--bind` to bind the connection string in the ASP.NET app to the MySql service's configuration. We also turn on the `--strategy at-once` so we can watch the application update itself when we upload new `hart`s to our depot.
 
 **Docker:**
 ```
@@ -129,11 +129,11 @@ The `Vagrantfile` included will start 4 VMs:
 
 * `haproxy`: An Ubuntu 14.04 vm that installs the current linux version of habitat.
 
-These machines are confiured to work with the [demo_script](demo_script.md) in the root of this repo.
+These machines are configured to work with the [demo_script](demo_script.md) in the root of this repo.
 
 ## Performing a rolling update accross three or more VMs
 
-You need at least three services running the ASP.NET sample in order to perform a rolling update. You could do this all on one machine as long as each service uses a different gossip, http and kestral port. If you would like to have each service run on its own VM (containers are coming), there is just one bit of server prep you should perform:
+You need at least three services running the ASP.NET sample in order to perform a rolling update. If you would like to have each service run on its own VM (containers are coming), there is just one bit of server prep you should perform:
 
 ### Configuring the firewall to allow butterfly traffic
 

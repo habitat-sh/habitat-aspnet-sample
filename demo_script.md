@@ -35,7 +35,7 @@ hab pkg exec core/dotnet-core-sdk dotnet ef database update
 ### Start first aspnet service
 
 ```
-hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --listen-gossip 0.0.0.0:9639 --listen-http 0.0.0.0:9632 --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
+hab sup load core/habitat-aspnet-sample --group dev --bind database:mysql.dev --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
 ```
 
 ### Start other aspnet services
@@ -58,7 +58,7 @@ hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --pee
 
 ```
 vagrant ssh haproxy
-sudo HAB_HAPROXY="$(cat /vagrant/habitat/ha.toml)" hab start core/haproxy  --group dev --bind backend:habitat-aspnet-sample.dev --peer 192.168.137.6:9638
+sudo HAB_HAPROXY="$(cat /vagrant/habitat/ha.toml)" hab start core/haproxy  --group dev --bind backend:habitat-aspnet-sample.dev --peer 192.168.137.81:9638
 ```
 
 ### Shutdown all supervisors
@@ -81,7 +81,7 @@ hab start core/mysql --group dev
 ### Start `hab1`'s aspnet service
 
 ```
-hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer $(Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias Ethernet).IPAddress:9638 --listen-gossip 0.0.0.0:9639 --listen-http 0.0.0.0:9632 --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
+hab sup load core/habitat-aspnet-sample --group dev --bind database:mysql.dev --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
 ```
 
 ### Start the other aspnet services
