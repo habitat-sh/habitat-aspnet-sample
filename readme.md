@@ -32,11 +32,8 @@ In order to succesfully build and run this application inside habitat today, the
 
 1. You are using `hab.exe` version 0.20.0 or later. Note that 0.18.0  and above is usable but lacks the multi service spervisor if running the mysql and ASP.NET Core services on the same instance.
 2. `$env:HAB_WINDOWS_STUDIO` is set to any value. I like `1` but your preferences may vary.
-3. Set `$env:HAB_DEPOT_URL` to `https://depot.stevenmurawski.com/v1/depot`
 
-The depot.stevenmurawski.com depot contains all necessary windows habitat packages (supervisor, studio, dotnet-core, etc) and only windows packages.
-
-Eventually these last two prerequisites will no longer be necessary.
+Eventually this last prerequisite will no longer be necessary.
 
 ## Building the MySql and ASP.NET Core sample
 
@@ -105,13 +102,13 @@ exit
 docker run -it core/sample-migrator --group dev --peer 172.17.0.2 --bind database:mysql.dev
 ```
 
-This only needs to be done once for the lifrtime of the VM or container or after changing schema.
+This only needs to be done once for the lifetime of the VM or container or after changing schema.
 
 ### Start the sample app:
 
 **VM:**
 ```
-hab sup load core/habitat-aspnet-sample --bind database:mysql.default --strategy at-once --url https://depot.stevenmurawski.com/v1/depot
+hab sup load core/habitat-aspnet-sample --bind database:mysql.default --strategy at-once
 ```
 
 Note that when adding services to a supervisor already running as we are doing here, we use `hab sup load` to load the service into the supervisor. We should see the ASP.NET Core service starting in our separate supervisor window. We use `--bind` to bind the connection string in the ASP.NET app to the MySql service's configuration. We also turn on the `--strategy at-once` so we can watch the application update itself when we upload new `hart`s to our depot.
@@ -149,7 +146,7 @@ Alternatively you can use the [Vagrantfile](Vagrantfile) in this repo to provisi
 You only need to start the MySql service on a single vm just as you did above. You will also need to create the sample app database as was done above too. Then start a `habitat-aspnet-sample` service on each VM:
 
 ```
-hab start core/habitat-aspnet-sample --bind database:mysql.default --peer 192.168.137.95:9638 --strategy rolling --url https://depot.stevenmurawski.com/v1/depot --topology leader
+hab start core/habitat-aspnet-sample --bind database:mysql.default --peer 192.168.137.95:9638 --strategy rolling --topology leader
 ```
 
 Note that this assumes that `192.168.137.95` is the ip of one of the nodes running the service. It can be any one but it has to be running. Since it is likely you have already started the `mysql` service, you can use its ip.

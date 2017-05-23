@@ -18,7 +18,6 @@ New-NetFirewallRule -DisplayName "Habitat UDP" -Direction Inbound -Action Allow 
 Add-Path "C:/habitat"
 
 [Environment]::SetEnvironmentVariable("HAB_WINDOWS_STUDIO", "1", "Machine")
-[Environment]::SetEnvironmentVariable("HAB_DEPOT_URL", "https://depot.stevenmurawski.com/v1/depot", "Machine")
 
 mkdir "/hab/cache" -ErrorAction SilentlyContinue
 mkdir "/hab/pkgs/core" -ErrorAction SilentlyContinue
