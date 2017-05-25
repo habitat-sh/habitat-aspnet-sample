@@ -14,6 +14,10 @@ $pkg_exports=@{
     "port"="port"
 }
 
+$pkg_binds=@{
+  "database"="username password port"
+}
+
 function invoke-download { }
 function invoke-verify { }
 function invoke-unpack { }
