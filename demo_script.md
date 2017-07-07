@@ -18,7 +18,7 @@ vagrant up # respond to all prompts
 ```
 $c = Get-Credential vagrant # vagrant is the password when prompted
 Enter-PSSession -VMName hab1 -Credential $c
-hab start core/mysql --group dev
+hab start core/mysql --group dev --password hab
 ```
 
 ### Create Database
@@ -35,7 +35,7 @@ hab pkg exec core/dotnet-core-sdk dotnet ef database update
 ### Start first aspnet service
 
 ```
-hab sup load core/habitat-aspnet-sample --group dev --bind database:mysql.dev --strategy rolling --topology leader
+hab sup start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --strategy rolling --topology leader --password hab
 ```
 
 ### Start other aspnet services
@@ -44,14 +44,14 @@ Hab2:
 ```
 $c = Get-Credential vagrant # vagrant is the password when prompted
 Enter-PSSession -VMName hab2 -Credential $c
-hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --strategy rolling --topology leader
+hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --strategy rolling --topology leader --password hab
 ```
 
 Hab3:
 ```
 $c = Get-Credential vagrant # vagrant is the password when prompted
 Enter-PSSession -VMName hab3 -Credential $c
-hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --strategy rolling --topology leader
+hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --strategy rolling --topology leader --password hab
 ```
 
 ### start haproxy
@@ -75,19 +75,19 @@ Finally run `cls` in all windows to clear the display.
 ### Start mysql
 
 ```
-hab start core/mysql --group dev
+hab sup start core/mysql --group dev --password hab
 ```
 
 ### Start `hab1`'s aspnet service
 
 ```
-hab sup load core/habitat-aspnet-sample --group dev --bind database:mysql.dev --strategy rolling --topology leader
+hab sup start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --strategy rolling --topology leader --password hab
 ```
 
 ### Start the other aspnet services
 
 ```
-hab start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --strategy rolling --topology leader
+hab sup start core/habitat-aspnet-sample --group dev --bind database:mysql.dev --peer 192.168.137.6:9638 --strategy rolling --topology leader --password hab
 ```
 
 ### Start haproxy
@@ -105,6 +105,6 @@ sudo HAB_HAPROXY="$(cat /vagrant/habitat/ha.toml)" hab start core/haproxy  --gro
 ### Update sample app
 
 ```
-build .
+hab studio build . -w
 hab pkg upload -z <key> C:\dev\habitat-aspnet-sample\habitat\results\core-habitat-aspnet-sample-0.2.0-20170219124600-x86_64-windows.hart
 ```

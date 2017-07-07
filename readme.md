@@ -28,12 +28,7 @@ The `hab-migrations` folder contains a plan for a linux based package used to si
 
 ## Using this sample with current Habitat binaries
 
-In order to succesfully build and run this application inside habitat today, the following prerequisites exist:
-
-1. You are using `hab.exe` version 0.20.0 or later. Note that 0.18.0  and above is usable but lacks the multi service spervisor if running the mysql and ASP.NET Core services on the same instance.
-2. `$env:HAB_WINDOWS_STUDIO` is set to any value. I like `1` but your preferences may vary.
-
-Eventually this last prerequisite will no longer be necessary.
+In order to succesfully build and run this application inside habitat today, you should be using `hab.exe` version 0.25.0 or later.
 
 ## Building the MySql and ASP.NET Core sample
 
@@ -42,7 +37,7 @@ Eventually this last prerequisite will no longer be necessary.
 ```
 git clone https://github.com/habitat-sh/habitat-aspnet-sample
 cd habitat-aspnet-sample
-hab studio enter
+hab studio enter -w
 build hab-mysql
 build habitat
 ```
@@ -122,11 +117,15 @@ docker run -it -p 8090:8090 core/habitat-aspnet-sample --group dev --peer 172.17
 
 The `Vagrantfile` included will start 4 VMs:
 
-* `hab1` - `hab3`: Windows Server 2016 machines. Their firewalls will be configured, and environment variables permanently set. The `Vagrantfile` assumes that you keep `hab.exe` and its dependencies in `c:/habitat` and will sync that to the vm and put it on the path. If you keep this file in a different location, adjust the `Vagrantfile` or copy the files to the above location.
+* `hab1` - `hab3`: Windows Server 2016 machines. Their firewalls will be configured to allow traffic from neighboring supervisors. The `Vagrantfile` assumes that you keep `hab.exe` and its dependencies in `c:/habitat` on the host and will sync that to the vm and put it on the path. If you keep this file in a different location, adjust the `Vagrantfile` or copy the files to the above location.
 
 * `haproxy`: An Ubuntu 14.04 vm that installs the current linux version of habitat.
 
 These machines are configured to work with the [demo_script](demo_script.md) in the root of this repo.
+
+### The `hab` user
+
+The `hab1` - `hab3` vagrant boxes create a admin user named hab and provision the boxes so that both the `hab` user and the `vagrant` user which runs the supervisor have to correct security policy rights assigned to them.
 
 ## Performing a rolling update accross three or more VMs
 
