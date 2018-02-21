@@ -1,8 +1,0 @@
-#!/bin/bash
-
-exec 2>&1
-
-echo "the db should be migrated. good night."
-while true; do
-  sleep 60000
-done

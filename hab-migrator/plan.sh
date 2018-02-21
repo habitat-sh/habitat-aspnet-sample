@@ -8,6 +8,7 @@ pkg_license=('MIT')
 pkg_description="A sample ASP.NET Core app"
 pkg_svc_user="root"
 pkg_svc_group="root"
+pkg_svc_run=".$pkg_prefix/bin/migrate.sh && echo 'done' && while true; do sleep 2; done"
 
 pkg_deps=(
   core/dotnet-core-sdk
