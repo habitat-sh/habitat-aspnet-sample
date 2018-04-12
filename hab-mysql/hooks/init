@@ -1,4 +1,5 @@
 mkdir "{{pkg.svc_var_path}}/logs" -ErrorAction SilentlyContinue
+(Get-Content {{pkg.svc_config_path}}/my.cnf).replace('\', '/') | Set-Content {{pkg.svc_config_path}}/my.cnf
 
 if (!(Test-Path "{{pkg.svc_data_path}}/mysql")) {
   mysqld --defaults-file={{pkg.svc_path}}/config/my.cnf `
