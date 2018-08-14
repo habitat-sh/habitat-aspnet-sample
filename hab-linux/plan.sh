@@ -45,4 +45,8 @@ do_build() {
 
 do_install() {
   "$(pkg_path_for dotnet-core-sdk)/bin/dotnet" publish --output "$pkg_prefix/www"
+
+  # Remove *.so for other platforms...they cause `do_strip()' to fail
+  # with `Unable to recognise the format' errors
+  find "$pkg_prefix/www/runtimes/" -maxdepth 1 -mindepth 1 -type d -not -name "linux-x64" -exec rm -rf "{}" \;
 }
