@@ -1,12 +1,10 @@
 $pkg_name="habitat-aspnet-sample"
-$pkg_origin="core"
-$pkg_version="0.2.0"
+$pkg_origin="mwrock"
+$pkg_version="1.4.6"
 $pkg_upstream_url="https://github.com/mwrock/habitat-aspnet-sample"
 $pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 $pkg_license=@('MIT')
 $pkg_description="A sample ASP.NET Core app"
-
-$pkg_svc_run="cd $pkg_svc_var_path;dotnet ${pkg_name}.dll"
 
 $pkg_deps=@("core/dotnet-core")
 $pkg_build_deps=@("core/dotnet-core-sdk")
@@ -17,10 +15,6 @@ $pkg_exports=@{
 
 $pkg_binds=@{
   "database"="username password port"
-}
-
-function Invoke-SetupEnvironment {
-  Set-RuntimeEnv "HAB_CONFIG_PATH" $pkg_svc_config_path
 }
 
 function Invoke-Build {

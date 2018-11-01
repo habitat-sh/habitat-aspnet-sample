@@ -1,0 +1,3 @@
+cd "{{pkg.svc_var_path}}"	
+$env:HAB_CONFIG_PATH="{{pkg.svc_config_path}}"	
+dotnet {{pkg.name}}.dll
