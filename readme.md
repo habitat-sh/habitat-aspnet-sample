@@ -1,3 +1,10 @@
+# Archived Repository
+This repository has been archived and will no longer receive updates. 
+It was archived as part of the [Repository Standardization Initiative](https://github.com/chef-boneyard/oss-repo-standardization-2025).
+If you are a Chef customer and need support for this repository, please contact your Chef account team.
+
+---
+
 # ASP.NET Core Sample Application for Habitat
 
 This is a multi tier, minimal functionality [ASP.NET Core](https://www.asp.net/core) MVC application. The purpose of this application is to both test and demonstrate how an ASP.NET Core application can be deployed and managed by [Habitat](https://www.habitat.sh/).
